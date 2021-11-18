@@ -1,0 +1,51 @@
+syntax = "proto3";
+package plugin;
+
+option java_package = "com.decidir.plugin.grpc";
+option java_outer_classname = "PluginProto";
+
+service PluginService {
+  rpc GetPlugins (GetPluginsRequest) returns (GetPluginsResponse) {}
+  rpc DownloadPlugin (DownloadPluginRequest) returns (stream DataChunk) {}
+  rpc InstallPlugin (InstallPluginRequest) returns (InstallPluginResponse) {}
+  rpc UninstallPlugin (UninstallPluginRequest) returns (UninstallPluginResponse) {}
+}
+
+message GetPluginsRequest {}
+
+message GetPluginsResponse {
+  repeated Downloadable downloadables = 1;
+  repeated Installable installables = 2;
+}
+
+message Downloadable {
+  uint32 id = 1;
+  string name = 2;
+  string version = 3;
+}
+
+message Installable {
+  uint32 id = 1;
+  string name = 2;
+  bool installed = 3;
+}
+
+message DownloadPluginRequest {
+  uint32 plugin_id = 1;
+}
+
+message DataChunk {
+  bytes data = 1;
+}
+
+message InstallPluginRequest {
+  uint32 plugin_id = 1;
+}
+
+message InstallPluginResponse {}
+
+message UninstallPluginRequest {
+  uint32 plugin_id = 1;
+}
+
+message UninstallPluginResponse {}
